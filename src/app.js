@@ -1,5 +1,6 @@
 import express from "express";
 import productRouter from "./routes/product.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.get('/', (req, res) => {
 })
 
 app.use("/products", productRouter);
+app.use("/categories", categoryRouter);
 
 export default app;

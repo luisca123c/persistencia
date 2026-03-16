@@ -40,18 +40,18 @@ const getProductById = (req, res) => {
 };
 
 const createProduct = (req, res) => {
-  const { name, price } = req.body;
+  const { name, price, category_id } = req.body;
   // Validación simple
-  if (!name || !price) {
+  if (!name || !price || !category_id) {
     return res.status(400).json({
       success: false,
-      message: "Nombre y precio son obligatorios",
+      message: "Nombre, precio y categoría son obligatorios",
       data: [],
       errors: [],
     });
   }
 
-  const newProduct = ProductModel.create({ name, price });
+  const newProduct = ProductModel.create({ name, price, category_id });
   res.status(201).json({
     success: true,
     message: "Producto creado correctamente",

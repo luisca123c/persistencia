@@ -1,6 +1,7 @@
 import categoriesData from "../data/categories.data.js";
-
+let arreglo = categoriesData.length + 1;
 export const CategoryModel = {
+
   findAll: () => {
     return categoriesData;
   },
@@ -10,7 +11,8 @@ export const CategoryModel = {
   },
 
   create: (newCategory) => {
-    const id = categoriesData.length + 1;
+    arreglo = arreglo + 1;
+    const id = arreglo;
     const categoryWithId = { id, ...newCategory };
     categoriesData.push(categoryWithId);
     return categoryWithId;

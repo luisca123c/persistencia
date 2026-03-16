@@ -1,5 +1,5 @@
 import productsData from "../data/products.data.js";
-
+let arreglo = productsData.length;
 export const ProductModel = {
   findAll: () => {
     return productsData;
@@ -10,7 +10,8 @@ export const ProductModel = {
   },
 
   create: (newProduct) => {
-    const id = productsData.length + 1;
+    arreglo = arreglo + 1;
+    const id = arreglo;
     const productWithId = { id, ...newProduct };
     productsData.push(productWithId);
     return productWithId;
@@ -29,5 +30,13 @@ export const ProductModel = {
     if (index === -1) return false;
     productsData.splice(index, 1);
     return true;
+  },
+
+  existsByCategoryId: (categoryId) => {
+    const products = productsData.find((p) => p.category_id === categoryId);
+    if (products) {
+      return true;
+    }
+    return false;
   },
 };

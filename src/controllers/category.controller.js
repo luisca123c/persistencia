@@ -1,4 +1,5 @@
 import { CategoryModel } from "../models/category.model.js";
+import { ProductModel } from "../models/product.model.js";
 
 const getAllCategories = (req, res) => {
   const categories = CategoryModel.findAll();
@@ -81,6 +82,15 @@ const updateCategory = (req, res) => {
 const deleteCategory = (req, res) => {
   try {
     const { id } = req.params;
+    const productsInCategory = ProductModel.existsByCategoryId(Number(id));
+    if (productsInCategory) {
+      return res.status(409).json({
+        success: false,
+        message: "No se puede eliminar la categoría porque tiene recursos vinculados", 
+        data: [],
+        errors: [],
+      })
+    }
     const isDeleted = CategoryModel.delete(Number(id));
     if (!isDeleted) {
       return res.status(404).json({

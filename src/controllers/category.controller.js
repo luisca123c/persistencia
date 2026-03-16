@@ -82,15 +82,6 @@ const updateCategory = (req, res) => {
 const deleteCategory = (req, res) => {
   try {
     const { id } = req.params;
-    const productsInCategory = ProductModel.existsByCategoryId(Number(id));
-    if (productsInCategory) {
-      return res.status(409).json({
-        success: false,
-        message: "No se puede eliminar la categoría porque tiene recursos vinculados", 
-        data: [],
-        errors: [],
-      })
-    }
     const isDeleted = CategoryModel.delete(Number(id));
     if (!isDeleted) {
       return res.status(404).json({
@@ -99,6 +90,15 @@ const deleteCategory = (req, res) => {
         data: [],
         errors: [],
       });
+    }
+    const productsInCategory = ProductModel.existsByCategoryId(Number(id));
+    if (productsInCategory) {
+      return res.status(409).json({
+        success: false,
+        message: "No se puede eliminar la categoría porque tiene recursos vinculados", 
+        data: [],
+        errors: [],
+      })
     }
     res.status(200).json({
       success: true,
@@ -116,4 +116,33 @@ const deleteCategory = (req, res) => {
   } 
 }
 
-export { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory };
+const getProductsByCategory = (req, res) => {
+  try {
+    const { id } = req.params;
+    const categoryExists = CategoryModel.findById(Number(id));
+    if (!categoryExists) {
+      return res.status(404).json({
+        success: false,
+        message: `La categoría con ID ${id} no existe`,
+        data: [],
+        errors: [],
+      });
+    }
+    const products = ProductModel.findByCategoryId(Number(id));
+    res.status(200).json({
+      success: true,
+      message: `Productos de la categoría: ${categoryExists.name}`,
+      data: products,
+      errors: [],
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error al buscar los productos de la categoría",
+      data: [],
+      errors: [],
+    });
+  }
+}
+
+export { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory, getProductsByCategory };

@@ -39,4 +39,9 @@ export const ProductModel = {
     }
     return false;
   },
+  findByCategoryId: (categoryId) => {
+    // Usamos .filter() porque una categoría puede tener MUCHOS productos
+    // Retorna un arreglo (vacío si no hay coincidencias, o con los productos encontrados)
+    return productsData.filter((p) => p.categoryId === categoryId);
+  },
 };
